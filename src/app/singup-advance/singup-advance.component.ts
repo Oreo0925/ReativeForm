@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
-// import { Observable, debounceTime, pipe } from 'rxjs';
-
+import { Observable } from 'rxjs';
+import { debounceTime, mergeMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 function ValidaConfirmEmail(c: AbstractControl) {
   console.log(c);
@@ -59,7 +60,7 @@ formData2 = new FormGroup({
 });
 */
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
 
    }
 
@@ -76,10 +77,9 @@ formData2 = new FormGroup({
       }
     });
 
-    // this.formData.get('name').valueChanges.pipe(
-    //   debounceTime(500), mergeMap(inputValue => this.http.get(''))
-    //   .subscribe(data => this.data = data);
-    // );
+    this.formData.get('name').valueChanges.pipe(
+      debounceTime(500), mergeMap(inputValue => this.http.get('')))
+      .subscribe(data => console.log(data) );
 
   }
 
