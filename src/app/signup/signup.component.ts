@@ -66,7 +66,7 @@ export class SignupComponent implements OnInit {
 
   }
 
-  get cityControl(){
+  get cityControl() {
     return this.formData.get('address.city');
   }
 }

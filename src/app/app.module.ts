@@ -7,9 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './signup/signup.component';
 import { SingupAdvanceComponent } from './singup-advance/singup-advance.component';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
-  declarations: [AppComponent, SignupComponent, SingupAdvanceComponent],
+  declarations: [AppComponent, SignupComponent, SingupAdvanceComponent, AddressComponent],
   imports: [
     BrowserModule,
     FormsModule,
