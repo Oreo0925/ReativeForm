@@ -1,8 +1,6 @@
 <h1>註冊畫面</h1>
-<form #f="ngForm">
-    {{ f.value | json }}
-    {{ pp.invalid }}
-    {{ pp.errors | json }}
+<form [formGroup]="formData">
+    {{ formData.value | json }}
      <!-- {{ pp.value }}
     {{ email.value }}
     {{ send.value }}
@@ -12,72 +10,72 @@
   <div class="form-group row">
     <label for="staticEmail" class="col-sm-2 col-form-label">姓名</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="name" placeholder="姓名 (必填)" minlength="3" required #pp="ngModel" ngModel>
-      <div *ngIf="pp.hasError('minlength')">字數需大於3</div>
-      <div *ngIf="pp.hasError('required')">必填</div>
+      <input type="text" class="form-control" placeholder="姓名 (必填)"  formControlName="personName">
+      <div *ngIf="formData.get('personName').hasError('minlength')">字數需大於3</div>
+      <div *ngIf="formData.get('personName').hasError('required')">必填</div>
     </div>
   </div>
   <div class="form-group row">
     <label for="staticEmail" class="col-sm-2 col-form-label">E-mail</label>
     <div class="col-sm-10">
-      <input type="email" class="form-control" placeholder="Email (必填)" name="email" #email="ngModel" required ngModel>
+      <input type="email" class="form-control" placeholder="Email (必填)" required formControlName="email">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="col-sm-2 col-form-label"></label>
     <div class="col-sm-10">
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="send" #send="ngModel" ngModel>
+        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" formControlName="send">
         <label class="form-check-label" for="defaultCheck1">
           寄送產品型錄
         </label>
       </div>
     </div>
   </div>
-  <div *ngIf="send.value">
+  <div *ngIf="formData.get('send').value" formGroupName="address">
     <div class="form-group row">
       <label for="inputPassword" class="col-sm-2 col-form-label">地址類別</label>
       <div class="col-sm-10">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="addressType" value="home" checked ngModel>
+          <input class="form-check-input" type="radio"  value="home"  formControlName="addressType">
           <label class="form-check-label" for="inlineRadio1">住家</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="addressType" value="office" ngModel>
+          <input class="form-check-input" type="radio" value="office" formControlName="addressType">
           <label class="form-check-label" for="inlineRadio2">公司</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="addressType" value="other" ngModel>
+          <input class="form-check-input" type="radio" value="other"  formControlName="addressType">
           <label class="form-check-label" for="inlineRadio3">其他</label>
         </div>
       </div>
     </div>
-    <div class="form-group row" ngModelGroup="address">
+    <div class="form-group row" >
       <label for="staticEmail" class="col-sm-2 col-form-label" >縣市區域、郵遞區號</label>
       <div class="col-sm-10">
         <div class="row">
           <div class="col">
-            <select id="inputState" class="form-control" name="city" [ngModel]="address.city" (ngModelChange)="queryAreaOption($event)">
+            <select id="inputState" class="form-control" formControlName="city" >
               <option selected >請選擇縣市</option>
               <option *ngFor="let city of cityOptions" [ngValue]="city">{{ city }}</option>
             </select>
           </div>
           <div class="col">
-            <select id="inputState" class="form-control" name="town" [ngModel]="address.town" (ngModelChange)="queryZipeOption($event)">
+            <select id="inputState" class="form-control" formControlName="area" >
               <option selected>請選擇區域</option>
               <option *ngFor="let area of areaOptions" [ngValue]="area">{{ area.key }}</option>
             </select>
           </div>
-          <div class="col"><input type="text" class="form-control" placeholder="郵遞區號" name="zipcode" [(ngModel)]="address.zipcode"></div>
+          <div class="col"><input type="text" class="form-control" placeholder="郵遞區號" formControlName="zipcode"></div>
         </div>
       </div>
     </div>
     <div class="form-group row">
       <label for="staticEmail" class="col-sm-2 col-form-label" >地址</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" name="addr" #addr="ngModel" ngModel>
+        <input type="text" class="form-control" formControlName="address" >
       </div>
     </div>
 </div>
-  <button type="submit" class="btn btn-primary" [disabled]="pp.invalid">送出</button>
+  <button type="submit" class="btn btn-primary" [disabled]="formData.invalid">送出</button>
 </form>

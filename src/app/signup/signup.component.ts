@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-signup',
@@ -16,6 +18,22 @@ export class SignupComponent implements OnInit {
     zipcode: ''
   };
 
+  /*
+  Validator 同步參數(第二個) / 非同步參數(第三個)
+  */
+  formData = new FormGroup({
+    personName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    email: new FormControl(''),
+    send: new FormControl(''),
+    address: new FormGroup({
+      addressType: new FormControl('home'),
+      city: new FormControl(''),
+      area: new FormControl(''),
+      zipcode: new FormControl(''),
+      address: new FormControl(''),
+    })
+  });
+
   constructor(private http: HttpClient) {
     this.http.get('../../assets/data/cityarea.json')
     .subscribe(data => {
@@ -24,7 +42,13 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formData.get('address.city').valueChanges
+    .subscribe(cityValue => this.queryAreaOption(cityValue));
+
+    this.formData.get('address.area').valueChanges
+    .subscribe(areaValue => this.queryZipeOption(areaValue));
+  }
   queryAreaOption(city) {
     this.address.city = city;
     this.areaOptions = Object.entries(
@@ -33,8 +57,16 @@ export class SignupComponent implements OnInit {
       }
     );
   }
-  queryZipeOption(town) {
-    this.address.town = town;
-    this.address.zipcode = town.value;
+  queryZipeOption(area) {
+    console.log(area);
+    const zipCodeControl = this.formData.get('address.zipcode') as FormControl;
+    zipCodeControl.setValue(area.value);
+    zipCodeControl.patchValue(area.value);
+    zipCodeControl.reset(area.value);
+
+  }
+
+  get cityControl(){
+    return this.formData.get('address.city');
   }
 }
